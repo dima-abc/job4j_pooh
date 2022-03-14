@@ -5,6 +5,10 @@ import org.junit.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+/**
+ * Hello world!
+ * Test.
+ */
 public class TriggerTest {
     @Test
     public void whenGetIntThen1() {
