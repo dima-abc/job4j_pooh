@@ -15,9 +15,23 @@ public class Req {
     private static final String POST = "POST";
     private static final String GET = "GET";
     private static final String HTTP = "HTTP";
+    /**
+     * Поле указывает на тип запроса.
+     * GET получить данные.
+     * POST отправить данные.
+     */
     private final String httpRequestType;
+    /**
+     * Указывает на режим работы: queue или topic.
+     */
     private final String poohMode;
+    /**
+     * Имя очереди или топика.
+     */
     private final String sourceName;
+    /**
+     * Содержание запроса.
+     */
     private final String param;
 
     public Req(String httpRequestType, String poohMode, String sourceName, String param) {
