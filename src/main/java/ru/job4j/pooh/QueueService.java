@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @since 14.03.2022
  */
 public class QueueService implements Service {
-    private final Map<String, ConcurrentLinkedQueue<Req>> queue = new ConcurrentHashMap<>();
+    private final Map<String, ConcurrentLinkedQueue<String>> queue = new ConcurrentHashMap<>();
     private static final String GET = "GET";
     private static final String POST = "POST";
 
@@ -31,24 +31,15 @@ public class QueueService implements Service {
     @Override
     public Resp process(Req req) {
         if (POST.equals(req.httpRequestType())) {
-            return processPost(req);
+            queue.putIfAbsent(
+                    req.getSourceName(),
+                    new ConcurrentLinkedQueue<>());
+            queue.get(req.getSourceName()).offer(req.getParam());
+            return Resp.of(req.getParam());
         }
         if (GET.equals(req.httpRequestType())) {
-            return processGet(req);
+            return Resp.of(queue.get(req.getSourceName()).poll());
         }
-        return new Resp("Not Implemented", "501");
-    }
-
-    private synchronized Resp processPost(Req req) {
-        ConcurrentLinkedQueue<Req> reqQueue = queue.putIfAbsent(
-                req.getSourceName(),
-                new ConcurrentLinkedQueue<>());
-        reqQueue.offer(req);
-        return new Resp(req.getParam(), "200");
-    }
-
-    private synchronized Resp processGet(Req req) {
-        ConcurrentLinkedQueue<Req> queueGet = queue.get(req.getSourceName());
-        return new Resp(queueGet.poll().getParam(), "200");
+        return Resp.of(null);
     }
 }

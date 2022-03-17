@@ -11,11 +11,20 @@ package ru.job4j.pooh;
  */
 public class Resp {
     private final String text;
-    public final String status;
+    private final String status;
+    private static final String ERROR = "501";
+    private static final String OK = "200";
 
-    public Resp(String text, String status) {
+    private Resp(String text, String status) {
         this.text = text;
         this.status = status;
+    }
+
+    public static Resp of(String text) {
+        if (text == null || text.isEmpty()) {
+            return new Resp("Not Implemented", ERROR);
+        }
+        return new Resp(text, OK);
     }
 
     public String text() {
