@@ -14,6 +14,7 @@ public class Resp {
     private final String status;
     private static final String ERROR = "501";
     private static final String OK = "200";
+    private static final String NO_CONTENT = "204";
 
     private Resp(String text, String status) {
         this.text = text;
@@ -21,10 +22,13 @@ public class Resp {
     }
 
     public static Resp of(String text) {
-        if (text == null || text.isEmpty()) {
-            return new Resp("Not Implemented", ERROR);
+        if (ERROR.equals(text)) {
+            return new Resp("", ERROR);
         }
-        return new Resp(text, OK);
+        if (text == null || text.isEmpty()) {
+            return new Resp("", NO_CONTENT);
+        }
+        return new Resp(OK + "=" + text, OK);
     }
 
     public String text() {
