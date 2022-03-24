@@ -23,12 +23,12 @@ public class Resp {
 
     public static Resp of(String text) {
         if (ERROR.equals(text)) {
-            return new Resp("Not Implemented", ERROR);
+            return new Resp("", ERROR);
         }
         if (text == null || text.isEmpty()) {
-            return new Resp("No Content", NO_CONTENT);
+            return new Resp("", NO_CONTENT);
         }
-        return new Resp(text, OK);
+        return new Resp(OK + "=" + text, OK);
     }
 
     public String text() {

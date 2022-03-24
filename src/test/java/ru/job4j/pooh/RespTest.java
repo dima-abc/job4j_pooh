@@ -31,13 +31,13 @@ public class RespTest {
     @Test
     public void when504ThenNoImplemented() {
         Resp resp = Resp.of("501");
-        assertThat(resp.text(), is("Not Implemented"));
+        assertThat(resp.status(), is("501"));
     }
 
     @Test
     public void whenTextMessageThenStatus200AndTextMessage() {
         Resp resp = Resp.of("Message");
-        assertThat(resp.text(), is("Message"));
+        assertThat(resp.text(), is("200=Message"));
         assertThat(resp.status(), is("200"));
     }
 }

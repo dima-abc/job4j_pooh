@@ -37,16 +37,20 @@ public class QueueService implements Service {
      */
     @Override
     public Resp process(Req req) {
+        Resp result = Resp.of(ERROR);
         if (POST.equals(req.httpRequestType())) {
             queue.putIfAbsent(
                     req.getSourceName(),
                     new ConcurrentLinkedQueue<>());
             queue.get(req.getSourceName()).add(req.getParam());
-            return Resp.of(req.getParam());
+            result = Resp.of(req.getParam());
+        } else if (GET.equals(req.httpRequestType())) {
+            if (queue.get(req.getSourceName()) != null && queue.get(req.getSourceName()).peek() != null) {
+                result = Resp.of(queue.get(req.getSourceName()).poll());
+            } else {
+                result = Resp.of("");
+            }
         }
-        if (GET.equals(req.httpRequestType())) {
-            return Resp.of(queue.get(req.getSourceName()).poll());
-        }
-        return Resp.of(ERROR);
+        return result;
     }
 }

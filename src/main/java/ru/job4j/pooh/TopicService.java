@@ -44,15 +44,15 @@ public class TopicService implements Service {
      */
     @Override
     public Resp process(Req req) {
+        Resp result = Resp.of(ERROR);
         if (GET.equals(req.httpRequestType())) {
             topic.putIfAbsent(req.getSourceName(), new ConcurrentHashMap<>());
             topic.get(req.getSourceName())
                     .putIfAbsent(req.getParam(), new ConcurrentLinkedQueue<>());
-            return Resp.of(topic.get(req.getSourceName())
+            result = Resp.of(topic.get(req.getSourceName())
                     .get(req.getParam()).poll()
             );
-        }
-        if (POST.equals(req.httpRequestType()) && !topic.get(req.getSourceName()).isEmpty()) {
+        } else if (POST.equals(req.httpRequestType()) && !topic.get(req.getSourceName()).isEmpty()) {
             topic.computeIfPresent(req.getSourceName(),
                     (key, hashMap) -> {
                         for (Map.Entry<String, ConcurrentLinkedQueue<String>> map : hashMap.entrySet()) {
@@ -60,8 +60,8 @@ public class TopicService implements Service {
                         }
                         return hashMap;
                     });
-            return Resp.of(req.getParam());
+            result = Resp.of(req.getParam());
         }
-        return Resp.of(ERROR);
+        return result;
     }
 }
