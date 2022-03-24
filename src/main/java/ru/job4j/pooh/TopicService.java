@@ -52,14 +52,10 @@ public class TopicService implements Service {
             result = Resp.of(topic.get(req.getSourceName())
                     .get(req.getParam()).poll()
             );
-        } else if (POST.equals(req.httpRequestType()) && !topic.get(req.getSourceName()).isEmpty()) {
-            topic.computeIfPresent(req.getSourceName(),
-                    (key, hashMap) -> {
-                        for (Map.Entry<String, ConcurrentLinkedQueue<String>> map : hashMap.entrySet()) {
-                            map.getValue().add(req.getParam());
-                        }
-                        return hashMap;
-                    });
+        } else if (POST.equals(req.httpRequestType())) {
+            topic.get(req.getSourceName())
+                    .values()
+                    .forEach(value -> value.add(req.getParam()));
             result = Resp.of(req.getParam());
         }
         return result;

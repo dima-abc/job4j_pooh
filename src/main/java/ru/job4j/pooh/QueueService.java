@@ -45,8 +45,9 @@ public class QueueService implements Service {
             queue.get(req.getSourceName()).add(req.getParam());
             result = Resp.of(req.getParam());
         } else if (GET.equals(req.httpRequestType())) {
-            if (queue.get(req.getSourceName()) != null && queue.get(req.getSourceName()).peek() != null) {
-                result = Resp.of(queue.get(req.getSourceName()).poll());
+            ConcurrentLinkedQueue<String> text = queue.get(req.getSourceName());
+            if (text != null) {
+                result = Resp.of(text.poll());
             } else {
                 result = Resp.of("");
             }

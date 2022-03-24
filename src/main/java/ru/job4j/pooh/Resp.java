@@ -28,7 +28,7 @@ public class Resp {
         if (text == null || text.isEmpty()) {
             return new Resp("", NO_CONTENT);
         }
-        return new Resp(OK + "=" + text, OK);
+        return new Resp(text, OK);
     }
 
     public String text() {

@@ -37,7 +37,7 @@ public class RespTest {
     @Test
     public void whenTextMessageThenStatus200AndTextMessage() {
         Resp resp = Resp.of("Message");
-        assertThat(resp.text(), is("200=Message"));
+        assertThat(resp.text(), is("Message"));
         assertThat(resp.status(), is("200"));
     }
 }
