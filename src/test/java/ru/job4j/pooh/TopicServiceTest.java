@@ -42,4 +42,13 @@ public class TopicServiceTest {
         assertThat(result1.text(), is("temperature=18"));
         assertThat(result2.text(), is(""));
     }
+
+    @Test
+    public void whenTopicFail() {
+        TopicService topicService = new TopicService();
+        String paramForPublisher = "temperature=18";
+        topicService.process(
+                new Req("POST", "topic", "weather", paramForPublisher)
+        );
+    }
 }

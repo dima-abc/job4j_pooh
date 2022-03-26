@@ -53,9 +53,12 @@ public class TopicService implements Service {
                     .get(req.getParam()).poll()
             );
         } else if (POST.equals(req.httpRequestType())) {
-            topic.get(req.getSourceName())
-                    .values()
-                    .forEach(value -> value.add(req.getParam()));
+            topic.computeIfPresent(req.getSourceName(),
+                    (key, hashMap) -> {
+                        hashMap.values()
+                                .forEach(value -> value.add(req.getParam()));
+                        return hashMap;
+                    });
             result = Resp.of(req.getParam());
         }
         return result;
